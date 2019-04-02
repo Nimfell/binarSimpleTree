@@ -31,7 +31,6 @@ public:
 };
 BSTFind info;
 
-
 class BST
 {
 public:
@@ -120,21 +119,19 @@ private:
                if (node->RightChild != NULL)
                  return find_key(node->RightChild, key); }
          return node;
+   } 
+
+   int keys_count(BSTNode* node)
+   {      
+      int s = 0; 
+      if (node == NULL)
+         return 0;        
+      s += keys_count(node->LeftChild);
+      s += keys_count(node->RightChild);
+      s++;
+      return s;    
    }
 
-   int keys_count(BSTNode* node)  
-   {      
-      if (node->LeftChild != NULL)                   // if the end is not reached       
-         return (1 + keys_count(node->LeftChild));
-      else
-         if (node->RightChild != NULL)
-            return (1 + keys_count(node->RightChild));
-         else
-            if (node != Root)
-               return (1 + keys_count(node->Parent->RightChild));
-            else
-               return 1;  // the end of the tree is reached -> go out from recurs      
-   }
 };
 
 int test()
@@ -200,6 +197,9 @@ int test()
    //====== DELETE ======
    if (tree.DeleteNodeByKey(4) != true) test++;
    if (tree.FindNodeByKey(4)->NodeHasKey != false) test++;
+
+   //====== COUNT ======
+   if (tree.Count() != 10) test++;
 
    return test;
 }
