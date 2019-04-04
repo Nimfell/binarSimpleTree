@@ -89,22 +89,18 @@ namespace AlgorithmsDataStructures2
         {
             BSTFind<T> _info = FindNodeByKey(key);
 
-            if (_info.NodeHasKey) { // the key was found
-                if (_info.Node.RightChild != null) { // remove with transfer of key information     
+            if (_info.NodeHasKey) {                           // the key was found
+                if (_info.Node.RightChild != null) {          // remove with transfer of key information     
                 
                     BSTNode<T> replacement = FinMinMax(_info.Node.RightChild, false);  // find replacement for node                 
-                    _info.Node.NodeKey = replacement.NodeKey;              // replace key
-                    _info.Node.NodeValue = replacement.NodeValue;          // replace value
-
+                    _info.Node.NodeKey = replacement.NodeKey;                          // replace key
+                    _info.Node.NodeValue = replacement.NodeValue;                      // replace value
                     link_the_tail(replacement, false); }
-                else // only delete the key node 
-                {                               
-                    link_the_tail(_info.Node, true); // left child to left
-                }
-                return true;
-            }
+                else {                                        // only delete the key node                                               
+                    link_the_tail(_info.Node, true); }        // left child to left               
+                return true; }
             else
-                return false; // if the node was not found
+                return false;                                 // if the node was not found
         }
 
         public int Count()
@@ -116,49 +112,37 @@ namespace AlgorithmsDataStructures2
 
         private void link_the_tail(BSTNode<T> parent, bool left_child)
         {
-            if (left_child)
-            {
-                if (parent != Root)
-                {
+            if (left_child) {
+                if (parent != Root) {
                     if (parent.LeftChild != null)                     // if child is not null
-                        parent.LeftChild.Parent = parent.Parent;     // link child to new parent
-                    if (parent.Parent.LeftChild == parent)           // what parent link to update?
-                        parent.Parent.LeftChild = parent.LeftChild;  // update the left parent link (new child or null) 
+                        parent.LeftChild.Parent = parent.Parent;      // link child to new parent
+                    if (parent.Parent.LeftChild == parent)            // what parent link to update?
+                        parent.Parent.LeftChild = parent.LeftChild;   // update the left parent link (new child or null) 
                     else
-                        parent.Parent.RightChild = parent.LeftChild; // update the right parent link (new child or null) 
-                }
-                else
-                {
+                        parent.Parent.RightChild = parent.LeftChild; }// update the right parent link (new child or null)                 
+                else {
                     Root = parent.LeftChild;
                     if (Root != null)
-                        Root.Parent = null;
-                }
-            }
-            else // if RightChild
-            {
+                        Root.Parent = null; } }
+            else { // if RightChild            
                 if (parent.RightChild != null)
                     parent.RightChild.Parent = parent.Parent;
 
                 if (parent.Parent.LeftChild == parent)
                     parent.Parent.LeftChild = parent.RightChild;
                 else
-                    parent.Parent.RightChild = parent.RightChild;
-            }
+                    parent.Parent.RightChild = parent.RightChild; }
         }
 
         private BSTNode<T> find_key(BSTNode<T> node, int key) // search 
         {
-            if (key < node.NodeKey)
-            {
+            if (key < node.NodeKey) {
                 if (node.LeftChild != null)
-                    return find_key(node.LeftChild, key);
-            }
-            else
-            {
+                    return find_key(node.LeftChild, key); }
+            else {
                 if (key > node.NodeKey)
                     if (node.RightChild != null)
-                        return find_key(node.RightChild, key);
-            }
+                        return find_key(node.RightChild, key); }
             return node;
         }
 
@@ -173,17 +157,8 @@ namespace AlgorithmsDataStructures2
             return s;
         }
 
-    }
-}  
-
-
-namespace BinarTree
-{
-    using AlgorithmsDataStructures2;
-    class Program
-    {
-        static void Main(string[] args)
-        {            
+        public static int test()
+        {
             int test = 0;
             BSTNode<int> node;
             BSTFind<int> fainded_node_info;
@@ -203,44 +178,44 @@ namespace BinarTree
 
             //======= FIND =======
             // search key which is in the tree
-            fainded_node_info = tree.FindNodeByKey (12);
+            fainded_node_info = tree.FindNodeByKey(12);
             if (fainded_node_info.Node.NodeKey != 12) test++;
             if (fainded_node_info.NodeHasKey != true) test++;
 
             // search key which is not in the tree and it tends to the left
-            not_fainded_node_info = tree.FindNodeByKey (10);
+            not_fainded_node_info = tree.FindNodeByKey(10);
             if (not_fainded_node_info.Node != fainded_node_info.Node) test++;
             if (not_fainded_node_info.NodeHasKey != false) test++;
             if (not_fainded_node_info.ToLeft != true) test++;
 
             // search key which is not in the tree and it tends to the right
-            not_fainded_node_info = tree.FindNodeByKey (14);
+            not_fainded_node_info = tree.FindNodeByKey(14);
             if (not_fainded_node_info.Node != fainded_node_info.Node) test++;
             if (not_fainded_node_info.NodeHasKey != false) test++;
-            if (not_fainded_node_info.ToLeft != false) test++; 
+            if (not_fainded_node_info.ToLeft != false) test++;
 
             //======= ADD =======
             // when the key is already in the tree
             if (tree.AddKeyValue(4, 5)) test++;
             // add to the left
             if (!tree.AddKeyValue(10, 9)) test++;
-            fainded_node_info = tree.FindNodeByKey (10);
+            fainded_node_info = tree.FindNodeByKey(10);
             if (fainded_node_info.Node.NodeKey != 10) test++;
             if (!fainded_node_info.NodeHasKey == true) test++;
             // add to the right
             if (!tree.AddKeyValue(14, 10)) test++;
-            fainded_node_info = tree.FindNodeByKey (14);
+            fainded_node_info = tree.FindNodeByKey(14);
             if (fainded_node_info.Node.NodeKey != 14) test++;
             if (fainded_node_info.NodeHasKey != true) test++;
 
             //======= MAX/MIN =======  
             if (tree.FinMinMax(tree.FindNodeByKey(8).Node, true) != tree.FindNodeByKey(14).Node) test++;
-            if (tree.FinMinMax(tree.FindNodeByKey(8).Node, false) != tree.FindNodeByKey(1).Node) test++;   
-            node = tree.FindNodeByKey(6).Node;   
-            if (tree.FinMinMax(node, true)  != tree.FindNodeByKey(7).Node) test++;
+            if (tree.FinMinMax(tree.FindNodeByKey(8).Node, false) != tree.FindNodeByKey(1).Node) test++;
+            node = tree.FindNodeByKey(6).Node;
+            if (tree.FinMinMax(node, true) != tree.FindNodeByKey(7).Node) test++;
             if (tree.FinMinMax(node, false) != tree.FindNodeByKey(5).Node) test++;
-            node = tree.FindNodeByKey(4).Node;   
-            if (tree.FinMinMax(node, true)  != tree.FindNodeByKey(7).Node) test++;
+            node = tree.FindNodeByKey(4).Node;
+            if (tree.FinMinMax(node, true) != tree.FindNodeByKey(7).Node) test++;
             if (tree.FinMinMax(node, false) != tree.FindNodeByKey(1).Node) test++;
 
             //====== DELETE & COUNT ======
@@ -270,17 +245,18 @@ namespace BinarTree
             if (tree.DeleteNodeByKey(14) != true) test++;
             if (tree.DeleteNodeByKey(10) != true) test++;
             if (tree.Count() != 1) test++;
-   
+
             if (tree.DeleteNodeByKey(8) != true) test++; // delete Root when it is only Root in the tree
             if (tree.Count() != 0) test++;
 
             if (!tree.AddKeyValue(4, 1)) test++;
-            if (!tree.AddKeyValue(3, 1)) test++;    
+            if (!tree.AddKeyValue(3, 1)) test++;
             if (tree.DeleteNodeByKey(4) != true) test++; // delete Root when it have left child
-            if (!tree.AddKeyValue(12, 1)) test++; 
+            if (!tree.AddKeyValue(12, 1)) test++;
             if (tree.DeleteNodeByKey(3) != true) test++; // delete Root when it have right child
             if (tree.Count() != 1) test++;
-            
+            return test;
         }
-    }
-}
+    }    
+}  
+
